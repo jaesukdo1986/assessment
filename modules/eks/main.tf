@@ -112,6 +112,39 @@ resource "aws_iam_role_policy_attachment" "ec2_policy_attachment" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
 }
 
+resource "aws_iam_role_policy_attachment" "elb_policy_attachment" {
+  role       = aws_iam_role.node_group_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+}
+
+resource "aws_iam_role_policy_attachment" "alb_policy_attachment" {
+  role       = aws_iam_role.node_group_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSLoadBalancerControllerIAMPolicy"
+}
+
+resource "aws_iam_role" "alb_controller_role" {
+  name = "${var.cluster_name}-alb-controller-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+
+  tags = var.default_tags
+}
+
+resource "aws_iam_role_policy_attachment" "alb_controller_policy_attachment" {
+  role       = aws_iam_role.alb_controller_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSLoadBalancerControllerIAMPolicy"
+}
 ############ Node Group ###############
 
 resource "aws_eks_node_group" "this" {
