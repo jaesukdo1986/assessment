@@ -9,7 +9,7 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 echo "Checking out the repository..."
-                checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: '<repository-url>']]])
+                checkout([$class: 'GitSCM', branches: [[name: '*/dev']], userRemoteConfigs: [[url: '<repository-url>']]])
             }
         }
         stage('Setup AWS CLI and kubectl') {
