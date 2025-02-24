@@ -22,7 +22,6 @@ pipeline {
                     if ! command -v aws &> /dev/null; then
                         echo "AWS CLI not found, installing..."
                         curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-                        rm -rf awscliv2.zip
                         unzip -o awscliv2.zip
                         ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
                         aws --version
